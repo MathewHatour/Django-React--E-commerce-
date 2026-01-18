@@ -1,0 +1,42 @@
+.checkout-container {
+  padding: 32px;
+  background-color: var(--bg-dark);
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+}
+
+.checkout-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.checkout-box h2 {
+  color: var(--text-main);
+}
+
+.checkout-box p {
+  color: var(--text-muted);
+}
+
+.checkout-box button {
+  padding: 12px;
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checkout-box button:hover {
+  background-color: var(--blue-accent);
+}

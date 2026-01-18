@@ -1,0 +1,22 @@
+# Node / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+
+# Logs
+**/*.log
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+
+# Python / Django
+backenddd/**/__pycache__/
+backenddd/**/*.pyc
+backenddd/db.sqlite3
+backenddd/.env
+
+# Build outputs
+**/build/
+**/.cache/
