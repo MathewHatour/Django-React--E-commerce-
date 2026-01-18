@@ -1,7 +1,37 @@
- .products-container {
+.products-container {
   padding: 24px;
   background-color: var(--bg-dark);
   min-height: 100vh;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  gap: 8px;
+}
+
+.search-form .search-input {
+  padding: 8px 12px;
+  width: 280px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #1f2a44);
+  background: var(--bg-card, #111827);
+  color: var(--text-main, #fff);
+}
+
+.search-form .search-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--blue-primary, #2563eb);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.search-form .search-btn:hover {
+  background-color: var(--blue-accent, #1d4ed8);
 }
 
 .products-grid {
