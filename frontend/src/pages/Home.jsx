@@ -1,77 +1,100 @@
+// This component displays the home page with product listings
 import { useEffect, useState } from "react";
-import dummyAPI from "../services/dummyApi";
+import API from "../services/api";
 import ProductCard from "../components/ProductCard";
-import "./Home.css";
-import { toast } from "../lib/toast.jsx";
+import "../styles/Home.css";
 
 export default function Home() {
+  // State to store the list of products
   const [products, setProducts] = useState([]);
-  const [query, setQuery] = useState("");
+  // State to store the search term
+  const [search, setSearch] = useState("");
 
+  // This runs when the component first loads
   useEffect(() => {
-    fetchProducts();
+    // Fetch all products from the backend
+    API.get("products/")
+      .then((response) => {
+        // Try different ways the data might be structured
+        let productList = [];
+        
+        if (response.data && response.data.results) {
+          // If data is paginated, get results array
+          productList = response.data.results;
+        } else if (response.data && response.data.products) {
+          // If data has a products property
+          productList = response.data.products;
+        } else if (Array.isArray(response.data)) {
+          // If data is directly an array
+          productList = response.data;
+        }
+        
+        // Update the products state
+        setProducts(productList);
+      })
+      .catch((error) => {
+        // Log error to console if fetch fails
+        console.error("Error fetching products:", error);
+      });
   }, []);
 
-  const fetchProducts = () => {
-    dummyAPI.get("/products")
-      .then(res => setProducts(res.data.products))
-      .catch(err => console.error(err));
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-
-    if (!query.trim()) {
-      fetchProducts(); // reset list
+  // This function runs when user submits the search form
+  const handleSearch = (event) => {
+    // Prevent the page from refreshing
+    event.preventDefault();
+    
+    // Don't search if search term is empty
+    if (!search.trim()) {
       return;
     }
-
-    dummyAPI.get(`/products/search?q=${encodeURIComponent(query)}`)
-      .then(res => setProducts(res.data.products))
-      .catch(err => console.error(err));
+    
+    // Search for products using the search term
+    API.get(`products/?search=${encodeURIComponent(search)}`)
+      .then((response) => {
+        // Try different ways the data might be structured
+        let productList = [];
+        
+        if (response.data && response.data.results) {
+          productList = response.data.results;
+        } else if (response.data && response.data.products) {
+          productList = response.data.products;
+        } else if (Array.isArray(response.data)) {
+          productList = response.data;
+        }
+        
+        // Update the products state with search results
+        setProducts(productList);
+      })
+      .catch((error) => {
+        // Log error to console if search fails
+        console.error("Error searching products:", error);
+      });
   };
 
   return (
     <div className="home-container">
-
-      {/* SEARCH BAR */}
-      <form className="search-bar" onSubmit={handleSearch}>
+      <form className="search-form" onSubmit={handleSearch}>
         <input
           type="text"
           placeholder="Search products..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="search-input"
         />
-        <button type="submit">Search</button>
+        <button className="search-btn" type="submit">
+          Search
+        </button>
       </form>
 
-      {/* PRODUCTS */}
       <div className="products-grid">
-        {products.map(product => (
-          <ProductCard
-            key={product.id}
-            product={{
-              id: product.id,
-              title: product.title,
-              price: product.price,
-              image_url: product.thumbnail,
-              description: product.description,
-            }}
-            onAddToCart={(p) => {
-              let cart = JSON.parse(localStorage.getItem("cart")) || [];
-              const exists = cart.find(x => x.id === p.id);
-              if (exists) {
-                exists.quantity += 1;
-              } else {
-                cart.push({ ...p, quantity: 1 });
-              }
-              localStorage.setItem("cart", JSON.stringify(cart));
-              toast.success(`${p.title} added to cart`);
-            }}
-          />
-        ))}
+        {products.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        )}
       </div>
-
     </div>
   );
 }
