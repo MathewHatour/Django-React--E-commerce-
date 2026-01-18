@@ -1,0 +1,113 @@
+/* =====================
+   Auth (Login/Register)
+   - Centered card
+   - Stacked inputs
+   - Visible, accessible buttons
+   - Guest-only implied (hide when parent has .authenticated)
+   ===================== */
+
+.auth-container {
+  min-height: calc(100vh - 64px);
+  background: #0b0f19;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 460px;
+  background: #121826;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 24px;
+  color: #f9fafb;
+}
+
+.auth-box h2 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.auth-box form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-box input {
+  background: #0b0f19;
+  border: 1px solid #1f2937;
+  border-radius: 6px;
+  padding: 12px 14px;
+  color: #f9fafb;
+}
+
+.auth-box input::placeholder { color: #9ca3af; }
+
+/* =====================
+   Buttons (visible even without a base class)
+   ===================== */
+.button-primary,
+.button-secondary,
+.button-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button-primary { background: #2563eb; color: #fff; }
+.button-primary:hover { background: #60a5fa; }
+.button-primary:focus { outline: 2px solid #60a5fa; outline-offset: 2px; }
+
+/* Switch link (Login/Register)
+   Add markup like: <p class="auth-switch">Already have an account? <a href="/login">Login</a></p> */
+.auth-switch { margin-top: 12px; text-align: center; color: #9ca3af; }
+.auth-switch a { color: #60a5fa; text-decoration: none; }
+.auth-switch a:hover { color: #2563eb; }
+
+/* Optional: hide auth when authenticated */
+.authenticated .auth-container { display: none; }
+
+/* Inline message (errors or info) */
+.auth-message { margin-top: 8px; color: #f87171; font-size: 14px; }
+.auth-container {
+  padding: 24px;
+  background-color: var(--bg-dark);
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+}
+
+.auth-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-box h2 { color: var(--text-main); }
+
+.auth-box input {
+  padding: 10px;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-main);
+}
+
+.auth-box input::placeholder { color: var(--text-muted); }
+
+.auth-box button { align-self: flex-end; }
