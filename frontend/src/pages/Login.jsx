@@ -34,24 +34,31 @@ export default function Login() {
     event.preventDefault();
     
     try {
-      // Send login credentials to the backend
-      const response = await API.post("token/", form);
+      // Send login credentials to the backend (using custom login endpoint)
+      const response = await API.post("users/login/", form);
 
       // Save the access token (used for authenticated requests)
       localStorage.setItem("access_token", response.data.access);
       // Save the refresh token (used to get a new access token)
       localStorage.setItem("refresh_token", response.data.refresh);
       // Save the username (to display in navbar)
-      localStorage.setItem("username", form.username);
+      localStorage.setItem("username", response.data.username);
+      // Save the user type (customer or seller)
+      localStorage.setItem("user_type", response.data.user_type);
 
       // Notify other components that user logged in
       window.dispatchEvent(new CustomEvent("auth-change"));
       
-      // Show success message
-      toast.success("Login successful!");
+      // Show success message with user type
+      const userTypeLabel = response.data.user_type === 'seller' ? 'Seller' : 'Customer';
+      toast.success(`Login successful! Welcome ${userTypeLabel}.`);
       
-      // Redirect user to home page
-      navigate("/");
+      // Redirect seller to dashboard, customer to home
+      if (response.data.user_type === 'seller') {
+        navigate("/seller/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       // Handle different types of errors
       if (!error.response) {
@@ -62,19 +69,16 @@ export default function Login() {
         let errorMessage = "Invalid username or password.";
         
         // Try to get a more specific error message
-        if (error.response.data && error.response.data.detail) {
-          const detailMessage = error.response.data.detail;
-          if (typeof detailMessage === "string") {
-            errorMessage = detailMessage;
-          }
+        if (error.response.data && error.response.data.error) {
+          errorMessage = error.response.data.error;
         }
         
         toast.error(errorMessage);
       } else {
         // Other errors
         let errorMessage = "Login failed. Try again.";
-        if (error.response.data && error.response.data.detail) {
-          errorMessage = error.response.data.detail;
+        if (error.response.data && error.response.data.error) {
+          errorMessage = error.response.data.error;
         }
         toast.error(errorMessage);
       }

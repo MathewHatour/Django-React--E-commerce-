@@ -9,11 +9,12 @@ export default function Register() {
   // Hook to navigate to different pages
   const navigate = useNavigate();
   
-  // State to store form data (username, email, password)
+  // State to store form data (username, email, password, user_type)
   const [form, setForm] = useState({ 
     username: "", 
     email: "", 
-    password: "" 
+    password: "",
+    user_type: "" // Will be 'customer' or 'seller'
   });
 
   // This function runs when user types in any input field
@@ -29,10 +30,24 @@ export default function Register() {
     });
   };
 
+  // This function runs when user selects their account type
+  const handleUserTypeSelect = (type) => {
+    setForm({
+      ...form,
+      user_type: type
+    });
+  };
+
   // This function runs when user submits the registration form
   const handleSubmit = async (event) => {
     // Prevent the page from refreshing
     event.preventDefault();
+    
+    // Check if user selected account type
+    if (!form.user_type) {
+      toast.error("Please select if you are a Customer or Seller");
+      return;
+    }
     
     try {
       // Send registration data to the backend
@@ -87,6 +102,26 @@ export default function Register() {
             onChange={handleChange}
             required
           />
+
+          <div className="user-type-selection">
+            <label>I am a:</label>
+            <div className="user-type-buttons">
+              <button
+                type="button"
+                className={`user-type-btn ${form.user_type === 'customer' ? 'active' : ''}`}
+                onClick={() => handleUserTypeSelect('customer')}
+              >
+                🛒 Customer
+              </button>
+              <button
+                type="button"
+                className={`user-type-btn ${form.user_type === 'seller' ? 'active' : ''}`}
+                onClick={() => handleUserTypeSelect('seller')}
+              >
+                🏪 Seller
+              </button>
+            </div>
+          </div>
           
           <button className="button-primary" type="submit">
             Register

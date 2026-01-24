@@ -11,6 +11,8 @@ export default function Navbar() {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
   // State to store the username (null if user is not logged in)
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  // State to store the user type (customer or seller)
+  const [userType, setUserType] = useState(localStorage.getItem("user_type"));
 
   // This function runs when user clicks the logout button
   const handleLogout = () => {
@@ -42,6 +44,7 @@ export default function Navbar() {
       // Get the latest token and username from local storage
       setToken(localStorage.getItem("access_token"));
       setUsername(localStorage.getItem("username"));
+      setUserType(localStorage.getItem("user_type"));
     };
 
     // Listen for storage changes (when user logs in/out in another tab)
@@ -63,6 +66,10 @@ export default function Navbar() {
         <Link to="/" className="logo">MyShop</Link>
         {/* Link to products page */}
         <Link to="/products" className="nav-link">Products</Link>
+        {/* Link to seller dashboard - only show if logged in AND is a seller */}
+        {token && userType === 'seller' && (
+          <Link to="/seller/dashboard" className="nav-link">Seller Dashboard</Link>
+        )}
       </div>
 
       <div className="navbar-right">

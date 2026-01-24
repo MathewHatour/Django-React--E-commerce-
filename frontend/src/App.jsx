@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import SellerDashboard from "./pages/SellerDashboard";
 import { Toaster } from "./lib/toast.jsx";
 
 export default function App() {
@@ -48,6 +49,8 @@ export default function App() {
         <Route path="/checkout" element={<Checkout />} />
         {/* Orders history page */}
         <Route path="/orders" element={<Orders />} />
+        {/* Seller Dashboard page */}
+        <Route path="/seller/dashboard" element={<SellerDashboard />} />
       </Routes>
     </Router>
   );

@@ -1,7 +1,15 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
+from django.urls import path, include
+from .views import ProductViewSet, SellerProductViewSet
 
 router = DefaultRouter()
-router.register('', ProductViewSet)
+router.register('', ProductViewSet, basename='product')
 
-urlpatterns = router.urls
+# Separate router for seller endpoints
+seller_router = DefaultRouter()
+seller_router.register('', SellerProductViewSet, basename='seller-product')
+
+urlpatterns = [
+    path('seller/', include(seller_router.urls)),
+    path('', include(router.urls)),
+]
